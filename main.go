@@ -32,7 +32,7 @@ func main() {
 	r.HandleFunc("/products/{id}", ProductHandler.GetProduct).Methods("GET")
 	r.HandleFunc("/products/{id}", ProductHandler.UpdateProduct).Methods("PUT")
 	r.HandleFunc("/products/{id}/status", ProductHandler.SoftDelete).Methods("PATCH")
-	r.HandleFunc("/products/{id}/restore", ProductHandler.RestoreProduct).Methods("PATCH")
+	// r.HandleFunc("/products/{id}/restore", ProductHandler.RestoreProduct).Methods("PATCH")
 	r.HandleFunc("/transactions", transactionHandler.GetTransactions).Methods("GET")
 	r.HandleFunc("/transactions/{id}", transactionHandler.GetTransaction).Methods("GET")
 	r.HandleFunc("/transactions", transactionHandler.CreateTransaction).Methods("POST")

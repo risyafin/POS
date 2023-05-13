@@ -10,18 +10,18 @@ type Repository struct {
 
 func (repo Repository) GetProducts() ([]Product, error) {
 	var products []Product
-	result := repo.DB.Find(&products, "status = ? AND deleted_at is null", "active")
+	result := repo.DB.Where("deleted_at is null AND status = ?", "active").Find(&products)
 	return products, result.Error
 }
 
 func (repo Repository) GetProduct(id string) (*Product, error) {
 	var product *Product
-	result := repo.DB.First(&product, id, "status = ? AND deleted_at is null", "active")
+	result := repo.DB.Where("deleted_at is null AND status = ?", "active").First(&product, id)
 	return product, result.Error
 }
 
 func (repo Repository) CreateProduct(product *Product) error {
-	result := repo.DB.Create(&product)
+	result := repo.DB.Select("Name", "Price", "Stock").Create(&product)
 	return result.Error
 }
 
@@ -31,11 +31,13 @@ func (repo Repository) UpdateProduct(id string, product *Product) error {
 }
 
 func (repo Repository) SoftDelete(id string, product *Product) (*Product, error) {
-	result := repo.DB.Model(&Product{}).Where("id =?", id).Updates(&product)
+	result := repo.DB.Where("id = ?", id).Delete(&product)
+	product.Status = "inactive"
+	result.Save(&product)
 	return product, result.Error
 }
 
-func (repo Repository) RestoreProduct(id string, product *Product) (*Product, error) {
-	result := repo.DB.Model(&Product{}).Where("id = ?", id).Updates("deleted_at is null AND status = active")
-	return product, result.Error
-}
+// func (repo Repository) RestoreProduct(id string, product *Product) (*Product, error) {
+// 	result := repo.DB.Model(&Product{}).Where("id = ?", id).Updates("deleted_at is null AND status = active")
+// 	return product, result.Error
+// }

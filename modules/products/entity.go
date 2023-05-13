@@ -1,16 +1,14 @@
 package products
 
-import (
-	"time"
-)
+import "gorm.io/gorm"
 
 type Product struct {
-	ID        int       `json:"id"`
-	Name      string    `json:"name"`
-	Price     int       `json:"price"`
-	Stock     int       `json:"stock"`
-	Status    string    `json:"status"`
-	DeletedAt time.Time `json:"deleted_at"`
+	ID        int            `json:"id"`
+	Name      string         `json:"name"`
+	Price     int            `json:"price"`
+	Stock     int            `json:"stock"`
+	Status    string         `json:"status"`
+	DeletedAt gorm.DeletedAt `json:"deleted_at"`
 }
 
 type Respons struct {
