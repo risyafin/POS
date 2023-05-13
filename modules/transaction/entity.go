@@ -12,6 +12,14 @@ type Transaction struct {
 	Items     []TransactionsItem `json:"items"`
 }
 
+type TransactionItemRequest struct {
+	ProductID int `json:"product_id"`
+	Quantity  int `json:"quantity"`
+}
+type TransactionRequest struct {
+	Items []TransactionItemRequest `json:"items"`
+}
+
 type TransactionsItem struct {
 	ID            int              `json:"id"`
 	ProductID     int              `json:"product_id"`
@@ -28,5 +36,5 @@ type GetAllTransactionsResponse struct {
 
 type GetDeteailTransactionResponse struct {
 	Message string
-	Data    Transaction
+	Data    *Transaction
 }

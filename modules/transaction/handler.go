@@ -53,18 +53,18 @@ func (handler Handler) GetTransactions(w http.ResponseWriter, r *http.Request) {
 
 func (handler Handler) CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
-	var transaction *Transaction
-	err := json.NewDecoder(r.Body).Decode(&transaction)
+	var request *Transaction
+	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = handler.Usecase.CreateTransaction(transaction)
+	transaction, err := handler.Usecase.CreateTransaction(request)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
-	respon := GetDeteailTransactionResponse{Message: "Succes", Data: *transaction}
+	respon := GetDeteailTransactionResponse{Message: "Succes", Data: transaction}
 	hasil, err := json.Marshal(respon)
 	if err != nil {
 		w.Write([]byte(err.Error()))

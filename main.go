@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	db, err := gorm.Open(mysql.Open("root:18543@tcp(localhost:3306)/pos"), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open("root:18543@tcp(localhost:3306)/pos?parseTime=true"), &gorm.Config{})
 	if err != nil {
 		panic("Failed connect to databases")
 	}
@@ -21,7 +21,7 @@ func main() {
 	ProductHandler := products.Handler{Usecase: ProductUsecase}
 
 	TransactionRepo := transaction.Repository{DB: db}
-	TransactionUsecase := transaction.Usecase{Repo: TransactionRepo}
+	TransactionUsecase := transaction.Usecase{Repo: TransactionRepo, ProductRepo: ProductRepo}
 	transactionHandler := transaction.Handler{Usecase: TransactionUsecase}
 
 	const port string = ":8080"
@@ -31,6 +31,8 @@ func main() {
 	r.HandleFunc("/products", ProductHandler.CreateProduct).Methods("POST")
 	r.HandleFunc("/products/{id}", ProductHandler.GetProduct).Methods("GET")
 	r.HandleFunc("/products/{id}", ProductHandler.UpdateProduct).Methods("PUT")
+	r.HandleFunc("/products/{id}/status", ProductHandler.SoftDelete).Methods("PATCH")
+	r.HandleFunc("/products/{id}/restore", ProductHandler.RestoreProduct).Methods("PATCH")
 	r.HandleFunc("/transactions", transactionHandler.GetTransactions).Methods("GET")
 	r.HandleFunc("/transactions/{id}", transactionHandler.GetTransaction).Methods("GET")
 	r.HandleFunc("/transactions", transactionHandler.CreateTransaction).Methods("POST")

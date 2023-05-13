@@ -1,5 +1,7 @@
 package products
 
+import "time"
+
 type Usecase struct {
 	Repo Repository
 }
@@ -18,6 +20,17 @@ func (usecase Usecase) UpdateProduct(id string, product *Product) error {
 	err := usecase.Repo.UpdateProduct(id, product)
 	return err
 
+}
+
+func (usecase Usecase) SoftDelete(id string, product *Product) (*Product, error) {
+	product.DeletedAt = time.Now()
+	product, err := usecase.Repo.SoftDelete(id, product)
+	return product, err
+}
+
+func (usecase Usecase) RestoreProduct(id string, product *Product) (*Product, error) {
+	product, err := usecase.Repo.RestoreProduct(id, product)
+	return product, err
 }
 
 func (usecase Usecase) CreateProduct(product *Product) error {

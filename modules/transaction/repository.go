@@ -1,8 +1,6 @@
 package transaction
 
 import (
-	"time"
-
 	"gorm.io/gorm"
 )
 
@@ -23,7 +21,6 @@ func (repo Repository) GetTransaction(id string) (*Transaction, error) {
 }
 
 func (repo Repository) CreateTransaction(transaction *Transaction) error {
-	transaction.Timestamp = time.Now()
 	result := repo.DB.Create(&transaction)
 	return result.Error
 }
