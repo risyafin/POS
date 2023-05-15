@@ -7,8 +7,10 @@ type Product struct {
 	Name      string         `json:"name"`
 	Price     int            `json:"price"`
 	Stock     int            `json:"stock"`
-	Status    string         `json:"status"`
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
+}
+type Request struct {
+	Status string  `json:"status"`
 }
 
 type Respons struct {

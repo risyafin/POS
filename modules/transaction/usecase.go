@@ -25,25 +25,28 @@ func (usecase Usecase) GetTransaction(id string) (*Transaction, error) {
 
 func (usecase Usecase) CreateTransaction(req *Transaction) (*Transaction, error) {
 	var transaction Transaction
+
 	var total int
+	// var stock int
 	for i, item := range req.Items {
 		stringProduct := strconv.Itoa(item.ProductID)
 
-		fmt.Println("stock :", item.Quantity)
 		product, err := usecase.ProductRepo.GetProduct(stringProduct)
 		if err != nil {
 			return nil, err
 		}
-		fmt.Println("produck stock :", product.Stock)
 		if item.Quantity > product.Stock {
 			return nil, errors.New("stock not enough")
 		}
-		product.Stock = product.Stock - item.Quantity
+		product.Stock -= item.Quantity
 		total += item.Quantity * product.Price
 		// fmt.Println("total :", total)
 		req.Items[i].Price = product.Price
 		req.Items[i].Product = *product
-		fmt.Println("item price :", item.Price, product.Price)
+		_, err = usecase.ProductRepo.UpdateProduct(stringProduct, product)
+		if err != nil {
+			return nil, err
+		}
 	}
 	transaction.Timestamp = time.Now()
 	transaction.Total = total

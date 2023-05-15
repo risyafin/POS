@@ -14,15 +14,24 @@ func (usecase Usecase) GetProduct(id string) (*Product, error) {
 	return product, err
 }
 
-func (usecase Usecase) UpdateProduct(id string, product *Product) error {
-	err := usecase.Repo.UpdateProduct(id, product)
-	return err
+func (usecase Usecase) UpdateProduct(id string, product *Product) (*Product,error) {
+	product , err := usecase.Repo.UpdateProduct(id, product)
+	return product, err
 
 }
 
-func (usecase Usecase) SoftDelete(id string, product *Product) (*Product, error) {
-	product, err := usecase.Repo.SoftDelete(id, product)
-	return product, err
+func (usecase Usecase) SoftDelete(id string, req *Request) (*Product, error) {
+	var product Product
+	var err error
+	if req.Status == "inactive" {
+		product, err := usecase.Repo.SoftDelete(id, &product)
+		return product, err
+	}
+	if req.Status == "active" {
+		product, err := usecase.Repo.RestoreProduct(id, &product)
+		return product, err
+	}
+	return &product, err
 }
 
 // func (usecase Usecase) RestoreProduct(id string, product *Product) (*Product, error) {
