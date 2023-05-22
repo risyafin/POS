@@ -50,11 +50,7 @@ func (usecase Usecase) CreateTransaction(ctx context.Context, req *Transaction) 
 			return nil, err
 		}
 	}
-	adminId, ok := ctx.Value("adminId").(int)
-	if !ok {
-		errors.New("adminID not int ")
-	}
-	transaction.AdminID = adminId
+	transaction.AdminID = req.AdminID
 	transaction.Timestamp = time.Now()
 	transaction.Total = total
 	transaction.Items = req.Items

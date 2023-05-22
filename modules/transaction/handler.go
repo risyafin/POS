@@ -2,6 +2,7 @@ package transaction
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -63,6 +64,12 @@ func (handler Handler) CreateTransaction(w http.ResponseWriter, r *http.Request)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	adminId, ok := r.Context().Value("adminId").(int)
+	if !ok {
+		errors.New("adminID not int ")
+		return
+	}
+	request.AdminID = adminId
 	transaction, err := handler.Usecase.CreateTransaction(r.Context(), request)
 	if err != nil {
 		w.Write([]byte(err.Error()))
