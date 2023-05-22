@@ -9,6 +9,7 @@ type Transaction struct {
 	ID        int                `json:"id"`
 	Timestamp time.Time          `json:"timestamp"`
 	Total     int                `json:"total"`
+	AdminID   int                `json:"admin_id"`
 	Items     []TransactionsItem `json:"items"`
 }
 

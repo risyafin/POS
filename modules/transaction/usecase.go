@@ -1,6 +1,7 @@
 package transaction
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"store/modules/products"
@@ -23,7 +24,8 @@ func (usecase Usecase) GetTransaction(id string) (*Transaction, error) {
 	return transaction, err
 }
 
-func (usecase Usecase) CreateTransaction(req *Transaction) (*Transaction, error) {
+func (usecase Usecase) CreateTransaction(ctx context.Context, req *Transaction) (*Transaction, error) {
+	fmt.Println(ctx.Value("adminId"))
 	var transaction Transaction
 
 	var total int
@@ -43,11 +45,16 @@ func (usecase Usecase) CreateTransaction(req *Transaction) (*Transaction, error)
 		// fmt.Println("total :", total)
 		req.Items[i].Price = product.Price
 		req.Items[i].Product = *product
-		_, err = usecase.ProductRepo.UpdateProduct(stringProduct, product)
+		err = usecase.ProductRepo.UpdateProduct(item.ProductID, product)
 		if err != nil {
 			return nil, err
 		}
 	}
+	adminId, ok := ctx.Value("adminId").(int)
+	if !ok {
+		errors.New("adminID not int ")
+	}
+	transaction.AdminID = adminId
 	transaction.Timestamp = time.Now()
 	transaction.Total = total
 	transaction.Items = req.Items

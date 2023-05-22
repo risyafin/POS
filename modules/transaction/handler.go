@@ -2,6 +2,7 @@ package transaction
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -53,13 +54,16 @@ func (handler Handler) GetTransactions(w http.ResponseWriter, r *http.Request) {
 
 func (handler Handler) CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
+	fmt.Println("idnya adalah ", r.Context().Value("adminId"))
+
 	var request *Transaction
+
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	transaction, err := handler.Usecase.CreateTransaction(request)
+	transaction, err := handler.Usecase.CreateTransaction(r.Context(), request)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
@@ -71,5 +75,4 @@ func (handler Handler) CreateTransaction(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	w.Write(hasil)
-
 }
