@@ -20,7 +20,6 @@ func (usecase Usecase) GetProduct(id string) (*Product, error) {
 		if product, err := usecase.Repo.GetProduct(id); err != nil {
 			return product, ErrChangedStatus
 		}
-
 	}
 	if product.DeletedAt != nil {
 		return nil, ErrPoductHasBeenRemoved
@@ -29,9 +28,16 @@ func (usecase Usecase) GetProduct(id string) (*Product, error) {
 }
 
 func (usecase Usecase) UpdateProduct(id int, product *Product) error {
-	err := usecase.Repo.UpdateProduct(id, product)
+	if product.DeletedAt == nil {
+		if err := usecase.Repo.UpdateProduct(id, product); err != nil {
+			return ErrChangedStatus
+		}
+	}
+	if product.DeletedAt != nil {
+		return ErrPoductHasBeenRemoved
+	}
 	product.ID = id
-	return err
+	return nil
 
 }
 

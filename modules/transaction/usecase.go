@@ -1,9 +1,9 @@
 package transaction
 
 import (
-	"context"
 	"errors"
 	"fmt"
+	"store/modules/logins"
 	"store/modules/products"
 	"strconv"
 	"time"
@@ -12,6 +12,7 @@ import (
 type Usecase struct {
 	Repo        Repository
 	ProductRepo products.Repository
+	AdminRepo   logins.Repository
 }
 
 func (usecase Usecase) GetTransactions() ([]Transaction, error) {
@@ -24,15 +25,13 @@ func (usecase Usecase) GetTransaction(id string) (*Transaction, error) {
 	return transaction, err
 }
 
-func (usecase Usecase) CreateTransaction(ctx context.Context, req *Transaction) (*Transaction, error) {
-	fmt.Println(ctx.Value("adminId"))
+func (usecase Usecase) CreateTransaction(req *Transaction) (*Transaction, error) {
 	var transaction Transaction
 
 	var total int
 	// var stock int
 	for i, item := range req.Items {
 		stringProduct := strconv.Itoa(item.ProductID)
-
 		product, err := usecase.ProductRepo.GetProduct(stringProduct)
 		if err != nil {
 			return nil, err
@@ -41,6 +40,7 @@ func (usecase Usecase) CreateTransaction(ctx context.Context, req *Transaction) 
 			return nil, errors.New("stock not enough")
 		}
 		product.Stock -= item.Quantity
+		product.Sold += item.Quantity
 		total += item.Quantity * product.Price
 		// fmt.Println("total :", total)
 		req.Items[i].Price = product.Price

@@ -16,3 +16,9 @@ func (repo Repository) Login(username string, password string) (*Admin, error) {
 	fmt.Println(&admin)
 	return &admin, result.Error
 }
+
+func (repo Repository) GetAdmiById(id int) (*Admin, error) {
+	var admin *Admin
+	result := repo.DB.First(&admin, id)
+	return admin, result.Error
+}

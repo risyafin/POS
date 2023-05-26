@@ -69,8 +69,16 @@ func (handler Handler) CreateTransaction(w http.ResponseWriter, r *http.Request)
 		errors.New("adminID not int ")
 		return
 	}
+	adminUser, ok := r.Context().Value("username").(string)
+	fmt.Println("ini username :", adminUser)
+	if !ok {
+		errors.New("username not string")
+		return
+	}
 	request.AdminID = adminId
-	transaction, err := handler.Usecase.CreateTransaction(r.Context(), request)
+	request.Admin.Username = adminUser
+	fmt.Println(request.Admin.Username)
+	transaction, err := handler.Usecase.CreateTransaction(request)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return

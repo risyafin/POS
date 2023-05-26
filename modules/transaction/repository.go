@@ -10,7 +10,7 @@ type Repository struct {
 
 func (repo Repository) GetTransactions() ([]Transaction, error) {
 	var transactions []Transaction
-	result := repo.DB.Find(&transactions)
+	result := repo.DB.Preload("Admin").Find(&transactions)
 	return transactions, result.Error
 }
 

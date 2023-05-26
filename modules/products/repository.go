@@ -26,7 +26,7 @@ func (repo Repository) CreateProduct(product *Product) error {
 }
 
 func (repo Repository) UpdateProduct(id int, product *Product) error {
-	result := repo.DB.Model(&Product{}).Where("deleted_at is null AND id = ?", id).Updates(&product) // handle di usecase
+	result := repo.DB.Model(&Product{}).Select("Name", "Price", "Stock", "DeletedAt").Where(id).Updates(&product) // handle di usecase
 	return result.Error
 }
 

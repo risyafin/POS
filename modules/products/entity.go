@@ -10,6 +10,7 @@ type Product struct {
 	Name      string     `json:"name"`
 	Price     int        `json:"price"`
 	Stock     int        `json:"stock"`
+	Sold      int        `json:"sold"`
 	DeletedAt *time.Time `json:"deleted_at"`
 }
 type Request struct {
