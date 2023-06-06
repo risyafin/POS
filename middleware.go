@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"net/http"
 	"store/modules/logins"
 
@@ -18,20 +17,19 @@ func jwtMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			w.Write([]byte(err.Error()))
 			return
 		}
-		claims, ok := token.Claims.(*logins.MyClaims) //forward ke usecase create transaction
+		_, ok := token.Claims.(*logins.MyClaims) //forward ke usecase create transaction
 		if !ok || !token.Valid {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte("token invalid"))
 			return
 		}
-		contextClaims := context.Background()
-		// contextClaimsUser := context.Background()
+		// contextClaims := context.Background()
+		// // contextClaimsUser := context.Background()
 
-		adminId := context.WithValue(contextClaims, "adminId", claims.Id)
-		username := context.WithValue(adminId, "username", claims.Username)
-		// contextClaimsUser = context.WithValue(contextClaimsUser, "adminUser", claims.Username)
-
-		next(w, r.WithContext(username))
+		// adminId := context.WithValue(contextClaims, "adminId", claims.Id)
+		// username := context.WithValue(adminId, "username", claims.Username)
+		// // contextClaimsUser = context.WithValue(contextClaimsUser, "adminUser", claims.Username)
+		next(w, r)
 
 	}
 }

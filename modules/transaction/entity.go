@@ -11,7 +11,7 @@ type Transaction struct {
 	Timestamp time.Time          `json:"timestamp"`
 	Total     int                `json:"total"`
 	AdminID   int                `json:"admin_id"`
-	Admin     logins.Admin      `json:"admin"`
+	Admin     logins.Admin       `json:"admin"`
 	Items     []TransactionsItem `json:"items"`
 }
 

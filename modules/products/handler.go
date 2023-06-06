@@ -12,28 +12,83 @@ type Handler struct {
 	Usecase Usecase
 }
 
-func (handler Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
+func (handler Handler) SearchingProduct(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
-	products, err := handler.Usecase.GetProducts()
-
+	keywords := r.URL.Query().Get("keywords")
+	Product, err := handler.Usecase.SearchingProduct(keywords)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
+	_, err = json.Marshal(Product)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	respons := Respons{Message: "Succes", Data: Product}
+	hasil, err := json.Marshal(respons)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Write(hasil)
 
+}
+
+func (handler Handler) GetproductsIDLimit(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+	limitStr := r.URL.Query().Get("limit")
+	offsetStr := r.URL.Query().Get("skip")
+
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil {
+		limit = 10
+	}
+	offset, err := strconv.Atoi(offsetStr)
+	if err != nil {
+		offset = 0
+	}
+	products, err := handler.Usecase.GetproductsIDLimit(limit, offset)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
 	_, err = json.Marshal(products)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	respon := Respons{Message: "Succes", Data: products}
-	hasil, err := json.Marshal(respon)
+	respons := Respons{Message: "succes", Data: products}
+	hasil, err := json.Marshal(respons)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Write(hasil)
 }
+
+// func (handler Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
+// 	w.Header().Set("Content-type", "application/json")
+// 	products, err := handler.Usecase.GetProducts()
+
+// 	if err != nil {
+// 		w.Write([]byte(err.Error()))
+// 		return
+// 	}
+
+// 	_, err = json.Marshal(products)
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+// 		return
+// 	}
+// 	respon := Respons{Message: "Succes", Data: products}
+// 	hasil, err := json.Marshal(respon)
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+// 		return
+// 	}
+// 	w.Write(hasil)
+// }
 
 func (handler Handler) GetProduct(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")

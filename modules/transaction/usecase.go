@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"store/modules/logins"
 	"store/modules/products"
+
 	"strconv"
 	"time"
 )
@@ -40,11 +41,10 @@ func (usecase Usecase) CreateTransaction(req *Transaction) (*Transaction, error)
 			return nil, errors.New("stock not enough")
 		}
 		product.Stock -= item.Quantity
-		product.Sold += item.Quantity
 		total += item.Quantity * product.Price
 		// fmt.Println("total :", total)
 		req.Items[i].Price = product.Price
-		req.Items[i].Product = *product
+		// req.Items[i].Product = *product
 		err = usecase.ProductRepo.UpdateProduct(item.ProductID, product)
 		if err != nil {
 			return nil, err
