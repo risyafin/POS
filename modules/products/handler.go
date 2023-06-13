@@ -35,20 +35,69 @@ func (handler Handler) SearchingProduct(w http.ResponseWriter, r *http.Request) 
 
 }
 
-func (handler Handler) GetproductsIDLimit(w http.ResponseWriter, r *http.Request) {
+func (handler Handler) Shorting(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
-	limitStr := r.URL.Query().Get("limit")
-	offsetStr := r.URL.Query().Get("skip")
+	columStr := r.URL.Query().Get("colum")
+	// sortedStr := r.URL.Query().Get("sorted")
 
+	if columStr == "" {
+		columStr = "name"
+	}
+	// if sortedStr == "" {
+	// 	sortedStr = "DESC"
+	// }
+
+	products, err := handler.Usecase.Shorting(columStr)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+	_, errJson := json.Marshal(products)
+	if errJson != nil {
+		http.Error(w, errJson.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	respon := Respons{Message: "Succes", Data: products}
+	hasil, errRespon := json.Marshal(respon)
+	if errJson != nil {
+		http.Error(w, errRespon.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Write(hasil)
+}
+
+func (handler Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+
+	columStr := r.URL.Query().Get("colum")
+	if columStr == "" {
+		columStr = "name"
+	}
+
+	sortedStr := r.URL.Query().Get("sorted")
+	if sortedStr == "" {
+		sortedStr = "ASC"
+	}
+
+	limitStr := r.URL.Query().Get("limit")
 	limit, err := strconv.Atoi(limitStr)
 	if err != nil {
 		limit = 10
 	}
+
+	offsetStr := r.URL.Query().Get("skip")
 	offset, err := strconv.Atoi(offsetStr)
 	if err != nil {
 		offset = 0
 	}
-	products, err := handler.Usecase.GetproductsIDLimit(limit, offset)
+
+	keywords := r.URL.Query().Get("keywords")
+	// if keywords == "" {
+	// 	handler.Usecase.SearchingProduct(keywords)
+	// }
+
+	products, err := handler.Usecase.GetProducts(limit, offset, columStr, sortedStr, keywords)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return

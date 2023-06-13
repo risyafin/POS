@@ -10,13 +10,22 @@ type Usecase struct {
 	Repo Repository
 }
 
-func (usecase Usecase) GetproductsIDLimit(limit int, offset int) ([]Product, error) {
-	products, err := usecase.Repo.GetproductsIDLimit(limit, offset)
+func (usecase Usecase) GetProducts(limit int, offset int, colum string, sort string, keywords string) ([]Product, error) {
+	// if keywords != "" {
+	// 	products, err := usecase.Repo.SearchingProduct(keywords)
+	// 	return products, err
+	// }
+	products, err := usecase.Repo.GetProducts(limit, offset, colum, sort,keywords)
 	return products, err
 }
 
 func (usecase Usecase) SearchingProduct(keywords string) ([]Product, error) {
 	product, err := usecase.Repo.SearchingProduct(keywords)
+	return product, err
+}
+
+func (usecase Usecase) Shorting(colum string) ([]Product, error) {
+	product, err := usecase.Repo.Shorting(colum)
 	return product, err
 }
 

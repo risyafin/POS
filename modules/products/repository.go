@@ -8,15 +8,21 @@ type Repository struct {
 	DB *gorm.DB
 }
 
-func (repo Repository) GetproductsIDLimit(limit int, offset int) ([]Product, error) {
+func (repo Repository) GetProducts(limit int, offset int, colum string, sort string, keywords string) ([]Product, error) {
 	var products []Product
-	result := repo.DB.Limit(limit).Offset(offset).Find(&products)
+	result := repo.DB.Limit(limit).Offset(offset).Order(colum+" "+sort).Where("name LIKE ?", "%"+keywords+"%").Find(&products)
 	return products, result.Error
 }
 
 func (repo Repository) SearchingProduct(keywords string) ([]Product, error) {
 	var product []Product
 	result := repo.DB.Where("name LIKE ?", "%"+keywords+"%").Find(&product)
+	return product, result.Error
+}
+
+func (repo Repository) Shorting(colum string) ([]Product, error) {
+	var product []Product
+	result := repo.DB.Order(colum).Find(&product)
 	return product, result.Error
 }
 

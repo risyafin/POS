@@ -34,9 +34,10 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/logins", LoginHandler.Login).Methods("POST")
-	r.HandleFunc("/products", jwtMiddleware(ProductHandler.GetproductsIDLimit)).Methods("GET")
+	r.HandleFunc("/products", jwtMiddleware(ProductHandler.GetProducts)).Methods("GET")
 	r.HandleFunc("/products/searching", jwtMiddleware(ProductHandler.SearchingProduct)).Methods("GET")
 	// r.HandleFunc("/products", jwtMiddleware(ProductHandler.GetProducts)).Methods("GET")
+	r.HandleFunc("/products/shorting", ProductHandler.Shorting).Methods("GET")
 	r.HandleFunc("/products", jwtMiddleware(ProductHandler.CreateProduct)).Methods("POST")
 	r.HandleFunc("/products/{id}", jwtMiddleware(ProductHandler.GetProduct)).Methods("GET")
 	r.HandleFunc("/products/{id}", jwtMiddleware(ProductHandler.UpdateProduct)).Methods("PUT")
@@ -45,6 +46,6 @@ func main() {
 	r.HandleFunc("/transactions", jwtMiddleware(transactionHandler.GetTransactions)).Methods("GET")
 	r.HandleFunc("/transactions/{id}", jwtMiddleware(transactionHandler.GetTransaction)).Methods("GET")
 	r.HandleFunc("/transactions", jwtMiddleware(transactionHandler.CreateTransaction)).Methods("POST")
-	fmt.Println("lohalhost:8080")
+	fmt.Println("localhost:8080")
 	http.ListenAndServe(port, r)
 }
