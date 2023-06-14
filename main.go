@@ -33,11 +33,12 @@ func main() {
 	const port string = ":8080"
 
 	r := mux.NewRouter()
+	r.HandleFunc("/registration", LoginHandler.Registration).Methods("POST")
 	r.HandleFunc("/logins", LoginHandler.Login).Methods("POST")
 	r.HandleFunc("/products", jwtMiddleware(ProductHandler.GetProducts)).Methods("GET")
 	r.HandleFunc("/products/searching", jwtMiddleware(ProductHandler.SearchingProduct)).Methods("GET")
 	// r.HandleFunc("/products", jwtMiddleware(ProductHandler.GetProducts)).Methods("GET")
-	r.HandleFunc("/products/shorting", ProductHandler.Shorting).Methods("GET")
+	r.HandleFunc("/products/shorting",  ProductHandler.Shorting).Methods("GET")
 	r.HandleFunc("/products", jwtMiddleware(ProductHandler.CreateProduct)).Methods("POST")
 	r.HandleFunc("/products/{id}", jwtMiddleware(ProductHandler.GetProduct)).Methods("GET")
 	r.HandleFunc("/products/{id}", jwtMiddleware(ProductHandler.UpdateProduct)).Methods("PUT")

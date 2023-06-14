@@ -72,7 +72,7 @@ func (handler Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
 
 	columStr := r.URL.Query().Get("colum")
 	if columStr == "" {
-		columStr = "name"
+		columStr = "id"
 	}
 
 	sortedStr := r.URL.Query().Get("sorted")

@@ -14,6 +14,7 @@ func jwtMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			return []byte("Bolong"), nil
 		})
 		if err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte(err.Error()))
 			return
 		}

@@ -16,8 +16,8 @@ type Usecase struct {
 	AdminRepo   logins.Repository
 }
 
-func (usecase Usecase) GetTransactions() ([]Transaction, error) {
-	Transactions, err := usecase.Repo.GetTransactions()
+func (usecase Usecase) GetTransactions(limit int, offset int, colum string, sort string, search string) ([]Transaction, error) {
+	Transactions, err := usecase.Repo.GetTransactions(limit, offset,colum,sort,search)
 	return Transactions, err
 }
 

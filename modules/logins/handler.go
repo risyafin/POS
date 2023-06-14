@@ -13,6 +13,22 @@ type Handler struct {
 	Usecase Usecase
 }
 
+func (handler Handler) Registration(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application")
+	var admin *Admin
+	err := json.NewDecoder(r.Body).Decode(&admin)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = handler.Usecase.Registration(admin)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+	w.Write([]byte("succes"))
+}
+
 func (handler Handler) Login(w http.ResponseWriter, r *http.Request) {
 	var admin Admin
 	json.NewDecoder(r.Body).Decode(&admin)
@@ -32,4 +48,3 @@ func (handler Handler) Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("token :", token)
 	w.Write([]byte(token))
 }
-

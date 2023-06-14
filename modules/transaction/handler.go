@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -33,8 +34,29 @@ func (handler Handler) GetTransaction(w http.ResponseWriter, r *http.Request) {
 
 func (handler Handler) GetTransactions(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
-	Transaction, err := handler.Usecase.GetTransactions()
+	limitStr := r.URL.Query().Get("limit")
+	limit, err := strconv.Atoi(limitStr)
 	if err != nil {
+		limit = 10
+	}
+	offsetStr := r.URL.Query().Get("skip")
+	offset, err := strconv.Atoi(offsetStr)
+	if err != nil {
+		offset = 0
+	}
+	colum := r.URL.Query().Get("colum")
+	if colum == "" {
+		colum = "id"
+	}
+	sort := r.URL.Query().Get("sort")
+	if sort == "" {
+		sort = "ASC"
+	}
+	search := r.URL.Query().Get("search")
+
+	Transaction, err := handler.Usecase.GetTransactions(limit, offset, colum, sort, search)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
 	}

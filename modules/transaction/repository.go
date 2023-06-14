@@ -8,9 +8,9 @@ type Repository struct {
 	DB *gorm.DB
 }
 
-func (repo Repository) GetTransactions() ([]Transaction, error) {
+func (repo Repository) GetTransactions(limit int, offset int, colum string, sort string, search string) ([]Transaction, error) {
 	var transactions []Transaction
-	result := repo.DB.Preload("Admin").Find(&transactions)
+	result := repo.DB.Preload("Admin").Limit(limit).Offset(offset).Order(colum+" "+sort).Where("id LIKE ?", "%"+search+"%").Find(&transactions)
 	return transactions, result.Error
 }
 
