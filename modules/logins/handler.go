@@ -14,7 +14,7 @@ type Handler struct {
 }
 
 func (handler Handler) Registration(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-type", "application")
+	w.Header().Set("Content-type", "application/json")
 	var admin *Admin
 	err := json.NewDecoder(r.Body).Decode(&admin)
 	if err != nil {

@@ -172,7 +172,7 @@ func (handler Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	}
 	respon := Respons{Message: "Succes", Data: []Product{*product}}
 	hasil, err := json.Marshal(respon)
-	if err != nil {
+	if err != nil { 
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

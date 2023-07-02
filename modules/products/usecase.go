@@ -93,7 +93,6 @@ func (usecase Usecase) SoftDelete(id string, status string) (*Product, error) {
 	if err := usecase.Repo.Save(product); err != nil {
 		return nil, ErrChangedStatus
 	}
-
 	return product, nil
 
 }

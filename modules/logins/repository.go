@@ -22,8 +22,8 @@ func (repo Repository) Login(username string, password string) (*Admin, error) {
 	return &admin, result.Error
 }
 
-func (repo Repository) GetAdmiById(id int) (*Admin, error) {
+func (repo Repository) GetAdmiById(username string) (*Admin, error) {
 	var admin *Admin
-	result := repo.DB.First(&admin, id)
+	result := repo.DB.Where("username = ?", username).First(&admin)
 	return admin, result.Error
 }

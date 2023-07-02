@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"store/modules/logins"
 	"store/modules/products"
+	"store/modules/store"
 	"store/modules/transaction"
 
 	"github.com/gorilla/mux"
@@ -22,6 +23,10 @@ func main() {
 	LoginUsecase := logins.Usecase{Repo: LoginRepo}
 	LoginHandler := logins.Handler{Usecase: LoginUsecase}
 
+	BrandsRepo := store.Repository{DB: db}
+	BrandsUsecase := store.Usecase{Repo: BrandsRepo}
+	BrandsHandler := store.Handler{Usecase: BrandsUsecase}
+
 	ProductRepo := products.Repository{DB: db}
 	ProductUsecase := products.Usecase{Repo: ProductRepo}
 	ProductHandler := products.Handler{Usecase: ProductUsecase}
@@ -35,10 +40,11 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/registration", LoginHandler.Registration).Methods("POST")
 	r.HandleFunc("/logins", LoginHandler.Login).Methods("POST")
+	r.HandleFunc("/brands", BrandsHandler.GetBrands).Methods("GET")
 	r.HandleFunc("/products", jwtMiddleware(ProductHandler.GetProducts)).Methods("GET")
 	r.HandleFunc("/products/searching", jwtMiddleware(ProductHandler.SearchingProduct)).Methods("GET")
 	// r.HandleFunc("/products", jwtMiddleware(ProductHandler.GetProducts)).Methods("GET")
-	r.HandleFunc("/products/shorting",  ProductHandler.Shorting).Methods("GET")
+	r.HandleFunc("/products/shorting", ProductHandler.Shorting).Methods("GET")
 	r.HandleFunc("/products", jwtMiddleware(ProductHandler.CreateProduct)).Methods("POST")
 	r.HandleFunc("/products/{id}", jwtMiddleware(ProductHandler.GetProduct)).Methods("GET")
 	r.HandleFunc("/products/{id}", jwtMiddleware(ProductHandler.UpdateProduct)).Methods("PUT")
