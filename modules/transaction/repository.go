@@ -16,7 +16,7 @@ func (repo Repository) GetTransactions(limit int, offset int, colum string, sort
 
 func (repo Repository) GetTransaction(id string) (*Transaction, error) {
 	var transaction *Transaction
-	result := repo.DB.Preload("Brand").Preload("Admin").Preload("Items.Product").First(&transaction, id)
+	result := repo.DB.Preload("Branch").Preload("Admin").Preload("Items.Product").First(&transaction, id)
 	return transaction, result.Error
 }
 

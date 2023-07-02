@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"store/modules/branch"
 	"store/modules/logins"
 	"store/modules/products"
-	"store/modules/store"
 	"store/modules/transaction"
 
 	"github.com/gorilla/mux"
@@ -23,9 +23,9 @@ func main() {
 	LoginUsecase := logins.Usecase{Repo: LoginRepo}
 	LoginHandler := logins.Handler{Usecase: LoginUsecase}
 
-	BrandsRepo := store.Repository{DB: db}
-	BrandsUsecase := store.Usecase{Repo: BrandsRepo}
-	BrandsHandler := store.Handler{Usecase: BrandsUsecase}
+	BranchRepo := branch.Repository{DB: db}
+	BranchUsecase := branch.Usecase{Repo: BranchRepo}
+	BranchHandler := branch.Handler{Usecase: BranchUsecase}
 
 	ProductRepo := products.Repository{DB: db}
 	ProductUsecase := products.Usecase{Repo: ProductRepo}
@@ -40,7 +40,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/registration", LoginHandler.Registration).Methods("POST")
 	r.HandleFunc("/logins", LoginHandler.Login).Methods("POST")
-	r.HandleFunc("/brands", BrandsHandler.GetBrands).Methods("GET")
+	r.HandleFunc("/brands", BranchHandler.GetBrands).Methods("GET")
 	r.HandleFunc("/products", jwtMiddleware(ProductHandler.GetProducts)).Methods("GET")
 	r.HandleFunc("/products/searching", jwtMiddleware(ProductHandler.SearchingProduct)).Methods("GET")
 	// r.HandleFunc("/products", jwtMiddleware(ProductHandler.GetProducts)).Methods("GET")

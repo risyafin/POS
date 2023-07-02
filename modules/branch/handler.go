@@ -1,4 +1,4 @@
-package store
+package branch
 
 import (
 	"encoding/json"
@@ -42,12 +42,12 @@ func (handler Handler) GetBrands(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 		return
 	}
-	_,err = json.Marshal(brands)
+	_, err = json.Marshal(brands)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	respon := Respon{Massage: "Succes", Data: brands}
+	respon := Respon{Message: "Succes", Data: brands}
 	hasil, err := json.Marshal(respon)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
