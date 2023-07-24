@@ -1,4 +1,3 @@
 # POS
 
 Test
-satu
