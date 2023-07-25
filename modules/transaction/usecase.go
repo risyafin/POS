@@ -41,7 +41,7 @@ func (usecase Usecase) CreateTransaction(req *Transaction) (*Transaction, error)
 			return nil, errors.New("stock not enough")
 		}
 		product.Stock -= item.Quantity
-		fmt.Println("ini sold awal", product.Sold)
+		
 		product.Sold += item.Quantity
 		total += item.Quantity * product.Price
 		// fmt.Println("total :", total)
