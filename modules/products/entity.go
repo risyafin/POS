@@ -13,6 +13,16 @@ type Product struct {
 	Sold      int        `json:"sold"`
 	DeletedAt *time.Time `json:"deleted_at"`
 }
+
+type ProductResponses struct {
+	Name  string `json:"name"`
+	Price int    `json:"price"`
+}
+
+func (admin ProductResponses) TableName() string {
+	return "products"
+}
+
 type Request struct {
 	Status string `json:"status"`
 }

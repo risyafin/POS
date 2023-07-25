@@ -46,6 +46,7 @@ func (usecase Usecase) Login(username, password string) (string, error) {
 	claims := MyClaims{
 		Username: admin.Username,
 		Id:       admin.Id,
+		BranchID: admin.BranchID,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 		},

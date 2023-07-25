@@ -2,6 +2,7 @@ package products
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -143,6 +144,7 @@ func (handler Handler) GetProduct(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 	vars := mux.Vars(r)
 	id := vars["id"]
+	fmt.Println("ini", r)
 
 	product, err := handler.Usecase.GetProduct(id)
 	if err != nil {
@@ -172,7 +174,7 @@ func (handler Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	}
 	respon := Respons{Message: "Succes", Data: []Product{*product}}
 	hasil, err := json.Marshal(respon)
-	if err != nil { 
+	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -209,12 +211,16 @@ func (handler Handler) SoftDelete(w http.ResponseWriter, r *http.Request) {
 func (handler Handler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 	vars := mux.Vars(r)
-	var product *Product
-	id, err := strconv.Atoi(vars["id"])
+	id := vars["id"]
+	fmt.Println(id)
+	// fmt.Println("disini kah ", vars["id"])
+	idInt, err := strconv.Atoi(id)
+	fmt.Println(idInt)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	var product *Product
 
 	err = json.NewDecoder(r.Body).Decode(&product)
 	if err != nil {
@@ -222,7 +228,7 @@ func (handler Handler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 		return
 	}
-	err = handler.Usecase.UpdateProduct(id, product)
+	err = handler.Usecase.UpdateProduct(idInt, product)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return

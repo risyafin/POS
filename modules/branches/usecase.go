@@ -1,4 +1,4 @@
-package branch
+package branches
 
 type Usecase struct {
 	Repo Repository

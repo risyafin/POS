@@ -44,7 +44,12 @@ func (repo Repository) CreateProduct(product *Product) error {
 }
 
 func (repo Repository) UpdateProduct(id int, product *Product) error {
-	result := repo.DB.Model(&Product{}).Select("Name", "Price", "Stock", "DeletedAt").Where(id).Updates(&product) // handle di usecase
+	result := repo.DB.Model(&Product{}).Select("Name", "Price", "Stock").Where(id).Updates(&product) // handle di usecase
+	return result.Error
+}
+
+func (repo Repository) UpdateProductStockSold(id int, product *Product) error {
+	result := repo.DB.Model(&Product{}).Select("Stock", "Sold").Where(id).Updates(&product) // handle di usecase
 	return result.Error
 }
 

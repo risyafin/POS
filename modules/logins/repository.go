@@ -11,7 +11,7 @@ type Repository struct {
 }
 
 func (repo Repository) Registration(admin *Admin) error {
-	result := repo.DB.Select("Name", "Username", "Password").Create(&admin)
+	result := repo.DB.Select("Name", "Username", "Password", "BranchID").Create(&admin)
 	return result.Error
 }
 

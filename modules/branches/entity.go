@@ -1,10 +1,10 @@
-package branch
+package branches
 
 type Branch struct {
 	Id   int    `json:"id"`
-	Shop string `json:"shop"`
+	Name string `json:"name"`
 }
 type Respon struct {
-	Message string  `json:"massage"`
+	Message string   `json:"massage"`
 	Data    []Branch `json:"data"`
 }

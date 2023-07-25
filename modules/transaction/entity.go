@@ -1,7 +1,7 @@
 package transaction
 
 import (
-	"store/modules/branch"
+	"store/modules/branches"
 	"store/modules/logins"
 	"store/modules/products"
 	"time"
@@ -11,8 +11,8 @@ type Transaction struct {
 	ID        int                `json:"id"`
 	Timestamp time.Time          `json:"timestamp"`
 	Total     int                `json:"total"`
-	BranchID  int                `json:"brand_id"`
-	Branch    branch.Branch      `json:"brand"`
+	BranchID  int                `json:"branch_id"`
+	Branch    branches.Branch    `json:"branch"`
 	AdminID   int                `json:"admin_id"`
 	Admin     logins.Admin       `json:"admin"`
 	Items     []TransactionsItem `json:"items"`

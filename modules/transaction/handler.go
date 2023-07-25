@@ -2,7 +2,6 @@ package transaction
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -87,17 +86,25 @@ func (handler Handler) CreateTransaction(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	adminId, ok := r.Context().Value("adminId").(int)
+	fmt.Println("ini ID dari context", adminId)
 	if !ok {
-		errors.New("adminID not int ")
+		http.Error(w, errorAdminID.Error(), http.StatusInternalServerError)
+		return
+	}
+	branchId, ok := r.Context().Value("branchId").(int)
+	if !ok {
+		http.Error(w, errorBranchID.Error(), http.StatusInternalServerError)
 		return
 	}
 	adminUser, ok := r.Context().Value("username").(string)
-	fmt.Println("ini username :", adminUser)
+	fmt.Println("ini username dari context:", adminUser)
 	if !ok {
-		errors.New("username not string")
+		http.Error(w, errorUsername.Error(), http.StatusInternalServerError)
+
 		return
 	}
 	request.AdminID = adminId
+	request.BranchID = branchId
 	request.Admin.Username = adminUser
 	fmt.Println(request.Admin.Username)
 	transaction, err := handler.Usecase.CreateTransaction(request)

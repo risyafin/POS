@@ -17,8 +17,8 @@ type Usecase struct {
 }
 
 func (usecase Usecase) GetTransactions(limit int, offset int, colum string, sort string, search string) ([]Transaction, error) {
-	Transactions, err := usecase.Repo.GetTransactions(limit, offset,colum,sort,search)
- 	return Transactions, err
+	Transactions, err := usecase.Repo.GetTransactions(limit, offset, colum, sort, search)
+	return Transactions, err
 }
 
 func (usecase Usecase) GetTransaction(id string) (*Transaction, error) {
@@ -41,16 +41,23 @@ func (usecase Usecase) CreateTransaction(req *Transaction) (*Transaction, error)
 			return nil, errors.New("stock not enough")
 		}
 		product.Stock -= item.Quantity
+		fmt.Println("ini sold awal", product.Sold)
+		product.Sold += item.Quantity
 		total += item.Quantity * product.Price
 		// fmt.Println("total :", total)
 		req.Items[i].Price = product.Price
 		// req.Items[i].Product = *product
-		err = usecase.ProductRepo.UpdateProduct(item.ProductID, product)
+		err = usecase.ProductRepo.UpdateProductStockSold(item.ProductID, product)
 		if err != nil {
 			return nil, err
 		}
 	}
 	transaction.AdminID = req.AdminID
+	fmt.Println(req.BranchID)
+	fmt.Println(transaction.BranchID)
+	transaction.BranchID = req.BranchID
+	fmt.Println(req.BranchID)
+	fmt.Println(transaction.BranchID)
 	transaction.Timestamp = time.Now()
 	transaction.Total = total
 	transaction.Items = req.Items

@@ -9,8 +9,14 @@ type Repository struct {
 }
 
 func (repo Repository) GetTransactions(limit int, offset int, colum string, sort string, search string) ([]Transaction, error) {
-	var transactions []Transaction
-	result := repo.DB.Preload("Brand").Preload("Admin").Limit(limit).Offset(offset).Order(colum+" "+sort).Where("id LIKE ?", "%"+search+"%").Find(&transactions)
+	var (
+		transactions []Transaction
+		db           = repo.DB
+	)
+	db = db.Preload("Branch")
+	db = db.Preload("Admin")
+	result := db.Limit(limit).Offset(offset).
+		Order(colum+" "+sort).Where("id LIKE ?", "%"+search+"%").Find(&transactions)
 	return transactions, result.Error
 }
 

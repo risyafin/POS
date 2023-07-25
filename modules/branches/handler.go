@@ -1,4 +1,4 @@
-package branch
+package branches
 
 import (
 	"encoding/json"

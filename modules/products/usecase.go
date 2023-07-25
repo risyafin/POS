@@ -15,7 +15,7 @@ func (usecase Usecase) GetProducts(limit int, offset int, colum string, sort str
 	// 	products, err := usecase.Repo.SearchingProduct(keywords)
 	// 	return products, err
 	// }
-	products, err := usecase.Repo.GetProducts(limit, offset, colum, sort,keywords)
+	products, err := usecase.Repo.GetProducts(limit, offset, colum, sort, keywords)
 	return products, err
 }
 
@@ -49,18 +49,18 @@ func (usecase Usecase) GetProduct(id string) (*Product, error) {
 }
 
 func (usecase Usecase) UpdateProduct(id int, product *Product) error {
-	err := usecase.Repo.UpdateProduct(id, product)
-	// if product.DeletedAt == nil {
-	// 	if err := usecase.Repo.UpdateProduct(id, product); err != nil {
-	// 		return ErrChangedStatus
-	// 	}
-	// }
-	// if product.DeletedAt != nil {
-	// 	return ErrPoductHasBeenRemoved
-	// }
 	product.ID = id
-	return err
-
+	if product.DeletedAt == nil {
+		if err := usecase.Repo.UpdateProduct(id, product); err != nil {
+			fmt.Println("masuk sini gk ?")
+			return ErrChangedStatus
+		}
+	}
+	if product.DeletedAt != nil {
+		fmt.Println("atau masuk sini")
+		return ErrPoductHasBeenRemoved
+	}
+	return nil
 }
 
 func (usecase Usecase) SoftDelete(id string, status string) (*Product, error) {
