@@ -2,4 +2,4 @@
 Point of sale App using Go
 
 ## Available Scripts
--> git clone 
+-> git clone https://github.com/risyafin/POS.git
