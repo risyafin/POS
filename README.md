@@ -1,6 +1,5 @@
-# POS
+## About App
+Point of sale App using Go
 
-Test
-satu
-dua
-
+## Available Scripts
+-> git clone 
