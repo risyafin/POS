@@ -4,34 +4,37 @@ import (
 	"fmt"
 	"net/http"
 	"store/modules/branches"
+	"store/modules/config"
 	"store/modules/logins"
 	"store/modules/products"
 	"store/modules/transaction"
 
 	"github.com/gorilla/mux"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
+	"github.com/joho/godotenv"
 )
 
-func main() {
-	db, err := gorm.Open(mysql.Open("root:18543@tcp(localhost:3306)/pos?parseTime=true"), &gorm.Config{})
-	if err != nil {
-		panic("Failed connect to databases")
-	}
+func init() {
+	godotenv.Load()
+}
 
-	LoginRepo := logins.Repository{DB: db}
+func main() {
+	conf := config.GetConfig()
+	conn := config.InitDatabaseConnection(conf)
+	config.AutoMigration(conn)
+
+	LoginRepo := logins.Repository{DB: conn}
 	LoginUsecase := logins.Usecase{Repo: LoginRepo}
 	LoginHandler := logins.Handler{Usecase: LoginUsecase}
 
-	BranchRepo := branches.Repository{DB: db}
+	BranchRepo := branches.Repository{DB: conn}
 	BranchUsecase := branches.Usecase{Repo: BranchRepo}
 	BranchHandler := branches.Handler{Usecase: BranchUsecase}
 
-	ProductRepo := products.Repository{DB: db}
+	ProductRepo := products.Repository{DB: conn}
 	ProductUsecase := products.Usecase{Repo: ProductRepo}
 	ProductHandler := products.Handler{Usecase: ProductUsecase}
 
-	TransactionRepo := transaction.Repository{DB: db}
+	TransactionRepo := transaction.Repository{DB: conn}
 	TransactionUsecase := transaction.Usecase{Repo: TransactionRepo, ProductRepo: ProductRepo}
 	transactionHandler := transaction.Handler{Usecase: TransactionUsecase}
 

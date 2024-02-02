@@ -1,8 +1,12 @@
 package logins
 
-import "github.com/golang-jwt/jwt"
+import (
+	"github.com/golang-jwt/jwt"
+	"gorm.io/gorm"
+)
 
 type Admin struct {
+	gorm.Model
 	Id       int    `json:"id"`
 	Name     string `json:"name"`
 	Username string `json:"username"`
