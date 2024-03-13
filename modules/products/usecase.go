@@ -11,10 +11,6 @@ type Usecase struct {
 }
 
 func (usecase Usecase) GetProducts(limit int, offset int, colum string, sort string, keywords string) ([]Product, error) {
-	// if keywords != "" {
-	// 	products, err := usecase.Repo.SearchingProduct(keywords)
-	// 	return products, err
-	// }
 	products, err := usecase.Repo.GetProducts(limit, offset, colum, sort, keywords)
 	return products, err
 }
@@ -29,22 +25,9 @@ func (usecase Usecase) Shorting(colum string) ([]Product, error) {
 	return product, err
 }
 
-// func (usecase Usecase) GetProducts() ([]Product, error) {
-// 	products, err := usecase.Repo.GetProducts()
-// 	return products, err
-// }
-
 func (usecase Usecase) GetProduct(id string) (*Product, error) {
 	var product *Product
 	product, err := usecase.Repo.GetProduct(id)
-	// if product.DeletedAt == nil {
-	// 	if product, err := usecase.Repo.GetProduct(id); err != nil {
-	// 		return product, ErrChangedStatus
-	// 	}
-	// }
-	// if product.DeletedAt != nil {
-	// 	return nil, ErrPoductHasBeenRemoved
-	// }
 	return product, err
 }
 
@@ -96,11 +79,6 @@ func (usecase Usecase) SoftDelete(id string, status string) (*Product, error) {
 	return product, nil
 
 }
-
-// func (usecase Usecase) RestoreProduct(id string, product *Product) (*Product, error) {
-// 	product, err := usecase.Repo.RestoreProduct(id, product)
-// 	return product, err
-// }
 
 func (usecase Usecase) CreateProduct(product *Product) error {
 	err := usecase.Repo.CreateProduct(product)

@@ -26,11 +26,6 @@ func (repo Repository) Shorting(colum string) ([]Product, error) {
 	return product, result.Error
 }
 
-// func (repo Repository) GetProducts() ([]Product, error) {
-// 	var products []Product
-// 	result := repo.DB.Unscoped().Find(&products)
-// 	return products, result.Error
-// }
 
 func (repo Repository) GetProduct(id string) (*Product, error) {
 	var product *Product

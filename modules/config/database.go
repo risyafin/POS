@@ -32,6 +32,7 @@ func AutoMigration(db *gorm.DB) {
 		&logins.Admin{},
 		&products.Product{},
 		&transaction.Transaction{},
+		&transaction.TransactionsItem{},
 	)
 	if err != nil {
 		log.Fatalf("Migration Failed. error: %v", err)
