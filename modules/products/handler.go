@@ -39,14 +39,9 @@ func (handler Handler) SearchingProduct(w http.ResponseWriter, r *http.Request) 
 func (handler Handler) Shorting(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 	columStr := r.URL.Query().Get("colum")
-	// sortedStr := r.URL.Query().Get("sorted")
-
 	if columStr == "" {
 		columStr = "name"
 	}
-	// if sortedStr == "" {
-	// 	sortedStr = "DESC"
-	// }
 
 	products, err := handler.Usecase.Shorting(columStr)
 	if err != nil {
@@ -94,9 +89,6 @@ func (handler Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	keywords := r.URL.Query().Get("keywords")
-	// if keywords == "" {
-	// 	handler.Usecase.SearchingProduct(keywords)
-	// }
 
 	products, err := handler.Usecase.GetProducts(limit, offset, columStr, sortedStr, keywords)
 	if err != nil {
@@ -116,29 +108,6 @@ func (handler Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Write(hasil)
 }
-
-// func (handler Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
-// 	w.Header().Set("Content-type", "application/json")
-// 	products, err := handler.Usecase.GetProducts()
-
-// 	if err != nil {
-// 		w.Write([]byte(err.Error()))
-// 		return
-// 	}
-
-// 	_, err = json.Marshal(products)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 		return
-// 	}
-// 	respon := Respons{Message: "Succes", Data: products}
-// 	hasil, err := json.Marshal(respon)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 		return
-// 	}
-// 	w.Write(hasil)
-// }
 
 func (handler Handler) GetProduct(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
@@ -212,8 +181,6 @@ func (handler Handler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 	vars := mux.Vars(r)
 	id := vars["id"]
-	fmt.Println(id)
-	// fmt.Println("disini kah ", vars["id"])
 	idInt, err := strconv.Atoi(id)
 	fmt.Println(idInt)
 	if err != nil {

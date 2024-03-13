@@ -5,9 +5,12 @@ import (
 	"store/modules/logins"
 	"store/modules/products"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Transaction struct {
+	gorm.Model
 	ID        int                `json:"id"`
 	Timestamp time.Time          `json:"timestamp"`
 	Total     int                `json:"total"`
@@ -27,6 +30,7 @@ type TransactionRequest struct {
 }
 
 type TransactionsItem struct {
+	gorm.Model
 	ID            int              `json:"id"`
 	ProductID     int              `json:"product_id"`
 	TransactionID int              `json:"transaction_id"`
