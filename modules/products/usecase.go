@@ -35,12 +35,10 @@ func (usecase Usecase) UpdateProduct(id int, product *Product) error {
 	product.ID = id
 	if product.DeletedAt == nil {
 		if err := usecase.Repo.UpdateProduct(id, product); err != nil {
-			fmt.Println("masuk sini gk ?")
 			return ErrChangedStatus
 		}
 	}
 	if product.DeletedAt != nil {
-		fmt.Println("atau masuk sini")
 		return ErrPoductHasBeenRemoved
 	}
 	return nil
