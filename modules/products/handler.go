@@ -95,12 +95,24 @@ func (handler Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 		return
 	}
-	_, err = json.Marshal(products)
+	var productRespons []ProductResponses
+	for _, p := range products {
+		productRespons = append(productRespons, ProductResponses{
+			ID:        p.ID,
+			Name:      p.Name,
+			Price:     p.Price,
+			Stock:     p.Stock,
+			Sold:      p.Sold,
+			DeletedAt: p.DeletedAt,
+		})
+	}
+
+	_, err = json.Marshal(productRespons)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	respons := Respons{Message: "succes", Data: products}
+	respons := Respons{Message: "succes", Data: productRespons}
 	hasil, err := json.Marshal(respons)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -113,19 +125,27 @@ func (handler Handler) GetProduct(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 	vars := mux.Vars(r)
 	id := vars["id"]
-	fmt.Println("ini", r)
 
 	product, err := handler.Usecase.GetProduct(id)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
-	hasil, err := json.Marshal(product)
+	responProduct := ProductResponses{
+		ID:        product.ID,
+		Name:      product.Name,
+		Price:     product.Price,
+		Stock:     product.Stock,
+		Sold:      product.Sold,
+		DeletedAt: product.DeletedAt,
+	}
+	result, err := json.Marshal(responProduct)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Write(hasil)
+	w.WriteHeader(http.StatusOK)
+	w.Write(result)
 }
 
 func (handler Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
@@ -141,7 +161,16 @@ func (handler Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 		return
 	}
-	respon := Respons{Message: "Succes", Data: []Product{*product}}
+	productRespons := ProductResponses{
+		ID:        product.ID,
+		Name:      product.Name,
+		Price:     product.Price,
+		Stock:     product.Stock,
+		Sold:      product.Sold,
+		DeletedAt: product.DeletedAt,
+	}
+
+	respon := Respons{Message: "Succes", Data: productRespons}
 	hasil, err := json.Marshal(respon)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -200,7 +229,16 @@ func (handler Handler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 		return
 	}
-	respon := Respons{Message: "Succes", Data: []Product{*product}}
+	productRespons := ProductResponses{
+		ID:        product.ID,
+		Name:      product.Name,
+		Price:     product.Price,
+		Stock:     product.Stock,
+		Sold:      product.Sold,
+		DeletedAt: product.DeletedAt,
+	}
+
+	respon := Respons{Message: "Succes", Data: productRespons}
 	hasil, err := json.Marshal(respon)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

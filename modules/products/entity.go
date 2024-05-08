@@ -18,8 +18,12 @@ type Product struct {
 }
 
 type ProductResponses struct {
-	Name  string `json:"name"`
-	Price int    `json:"price"`
+	ID        int        `json:"id"`
+	Name      string     `json:"name"`
+	Price     int        `json:"price"`
+	Stock     int        `json:"stock"`
+	Sold      int        `json:"sold"`
+	DeletedAt *time.Time `json:"deleted_at"`
 }
 
 func (admin ProductResponses) TableName() string {
@@ -31,8 +35,8 @@ type Request struct {
 }
 
 type Respons struct {
-	Message string    `json:"massage"`
-	Data    []Product `json:"data"`
+	Message string `json:"massage"`
+	Data    any    `json:"data"`
 }
 
 var (
