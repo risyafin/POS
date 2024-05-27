@@ -13,56 +13,6 @@ type Handler struct {
 	Usecase Usecase
 }
 
-func (handler Handler) SearchingProduct(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-type", "application/json")
-	keywords := r.URL.Query().Get("keywords")
-	Product, err := handler.Usecase.SearchingProduct(keywords)
-	if err != nil {
-		w.Write([]byte(err.Error()))
-		return
-	}
-	_, err = json.Marshal(Product)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	respons := Respons{Message: "Succes", Data: Product}
-	hasil, err := json.Marshal(respons)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.Write(hasil)
-
-}
-
-func (handler Handler) Shorting(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-type", "application/json")
-	columStr := r.URL.Query().Get("colum")
-	if columStr == "" {
-		columStr = "name"
-	}
-
-	products, err := handler.Usecase.Shorting(columStr)
-	if err != nil {
-		w.Write([]byte(err.Error()))
-		return
-	}
-	_, errJson := json.Marshal(products)
-	if errJson != nil {
-		http.Error(w, errJson.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	respon := Respons{Message: "Succes", Data: products}
-	hasil, errRespon := json.Marshal(respon)
-	if errJson != nil {
-		http.Error(w, errRespon.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.Write(hasil)
-}
-
 func (handler Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 

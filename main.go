@@ -44,15 +44,13 @@ func main() {
 	r.HandleFunc("/registration", LoginHandler.Registration).Methods("POST")
 	r.HandleFunc("/logins", LoginHandler.Login).Methods("POST")
 	r.HandleFunc("/branch", jwtMiddleware(BranchHandler.GetBrands)).Methods("GET")
-	r.HandleFunc("/products", jwtMiddleware(ProductHandler.GetProducts)).Methods("GET")
-	r.HandleFunc("/products/searching", jwtMiddleware(ProductHandler.SearchingProduct)).Methods("GET")
 
-	r.HandleFunc("/products/shorting", ProductHandler.Shorting).Methods("GET")
+	r.HandleFunc("/products", jwtMiddleware(ProductHandler.GetProducts)).Methods("GET")
 	r.HandleFunc("/products", jwtMiddleware(ProductHandler.CreateProduct)).Methods("POST")
 	r.HandleFunc("/products/{id}", jwtMiddleware(ProductHandler.GetProduct)).Methods("GET")
 	r.HandleFunc("/products/{id}", jwtMiddleware(ProductHandler.UpdateProduct)).Methods("PUT")
 	r.HandleFunc("/products/{id}/status", jwtMiddleware(ProductHandler.SoftDelete)).Methods("PATCH")
-	// r.HandleFunc("/products/{id}/restore", ProductHandler.RestoreProduct).Methods("PATCH")
+	
 	r.HandleFunc("/transactions", jwtMiddleware(transactionHandler.GetTransactions)).Methods("GET")
 	r.HandleFunc("/transactions/{id}", jwtMiddleware(transactionHandler.GetTransaction)).Methods("GET")
 	r.HandleFunc("/transactions", jwtMiddleware(transactionHandler.CreateTransaction)).Methods("POST")

@@ -1,8 +1,6 @@
 package logins
 
 import (
-	"fmt"
-
 	"gorm.io/gorm"
 )
 
@@ -18,11 +16,10 @@ func (repo Repository) Registration(admin *Admin) error {
 func (repo Repository) Login(username string, password string) (*Admin, error) {
 	var admin Admin
 	result := repo.DB.Model(&admin).Where("username =? AND password =? ", username, password).First(&admin)
-	fmt.Println(&admin)
 	return &admin, result.Error
 }
 
-func (repo Repository) GetAdmiById(username string) (*Admin, error) {
+func (repo Repository) GetAdmiByUsername(username string) (*Admin, error) {
 	var admin *Admin
 	result := repo.DB.Where("username = ?", username).First(&admin)
 	return admin, result.Error

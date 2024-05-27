@@ -32,7 +32,7 @@ func (usecase Usecase) Registration(admin *Admin) error {
 }
 
 func (usecase Usecase) Login(username, password string) (string, error) {
-	admin, err := usecase.Repo.GetAdmiById(username)
+	admin, err := usecase.Repo.GetAdmiByUsername(username)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return "", errors.New("invalid idential")
